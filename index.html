@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>France Trip 2026 v4</title>
+<style>
+:root{
+  --bg:#f6f2ea; --card:#fffdf8; --ink:#17211b; --muted:#6e776f;
+  --accent:#234d3c; --accent2:#d7b97d; --line:#e6dfd2; --danger:#a33a2b;
+  --shadow:0 12px 32px rgba(28,38,31,.08); --radius:22px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.app{max-width:860px;margin:auto;min-height:100vh;padding-bottom:92px}
+.hero{padding:28px 20px 18px;background:linear-gradient(135deg,#18392d,#2f5f4c);color:white;border-radius:0 0 30px 30px}
+.hero h1{margin:0;font-family:Georgia,serif;font-size:34px;font-weight:600}
+.hero p{margin:8px 0 0;color:#e7efe9}
+.hero .count{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.pill{background:rgba(255,255,255,.14);padding:8px 12px;border-radius:999px;font-size:13px}
+.section{padding:18px 16px 4px}
+.section h2{font-size:20px;margin:0 0 12px}
+.sub{color:var(--muted);font-size:13px;margin-top:-7px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+.day{display:flex;gap:14px}
+.datebox{min-width:62px;text-align:center;background:#f0eadf;border-radius:17px;padding:10px 7px;height:fit-content}
+.datebox b{font-size:22px;display:block}
+.datebox span{font-size:12px;color:var(--muted)}
+.daybody{flex:1}
+.daytitle{font-weight:700;font-size:17px}
+.city{color:var(--accent);font-size:13px;margin:3px 0 10px}
+.event{border-left:2px solid #d8cfbf;padding:0 0 12px 12px;margin-left:4px;position:relative}
+.event:last-child{padding-bottom:0}
+.event:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent2);position:absolute;left:-5px;top:6px}
+.event .time{font-size:12px;color:var(--muted)}
+.event .name{font-weight:650;margin:2px 0}
+.event .note{font-size:13px;color:var(--muted);line-height:1.5}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.btn{border:0;border-radius:12px;padding:9px 12px;background:#e9eee9;color:var(--accent);font-weight:650;font-size:13px}
+.btn.primary{background:var(--accent);color:white}
+.btn.gold{background:#efe3c7;color:#614a20}
+.btn.danger{background:#f7e5e2;color:var(--danger)}
+.nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,248,.95);backdrop-filter:blur(18px);border-top:1px solid var(--line);display:flex;justify-content:center;z-index:20}
+.navinner{width:min(860px,100%);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 6px max(8px,env(safe-area-inset-bottom))}
+.nav button{border:0;background:none;padding:6px 2px;color:#768078;font-size:11px}
+.nav button.active{color:var(--accent);font-weight:750}
+.nav .ico{font-size:21px;display:block;margin-bottom:2px}
+.page{display:none}
+.page.active{display:block}
+.toolbar{display:flex;gap:8px;margin:12px 16px 2px}
+.toolbar .btn{flex:1}
+.ticket{display:flex;align-items:center;gap:12px}
+.ticket .icon{font-size:28px}
+.ticket .meta{flex:1}
+.ticket small{color:var(--muted)}
+.upload{display:none}
+.citygrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.citycard{min-height:120px;background:linear-gradient(145deg,#fff,#f0e8d8);border:1px solid var(--line);border-radius:20px;padding:15px}
+.citycard b{font-family:Georgia,serif;font-size:21px}
+.citycard p{font-size:12px;color:var(--muted);line-height:1.45}
+.guideGrid,.photoGrid{display:grid;grid-template-columns:1fr;gap:12px}
+.guideCard,.photoCard{background:var(--card);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow)}
+.guideTop,.photoTop{display:grid;grid-template-columns:120px 1fr;gap:14px;padding:14px}
+.guideImg,.photoImg{width:100%;height:120px;background:#ebe5d9 center/cover no-repeat;border-radius:18px;display:flex;align-items:center;justify-content:center;color:#7a7a7a;font-size:12px;text-align:center;padding:8px}
+.guideBody h3,.photoBody h3{margin:0 0 4px;font-size:18px}
+.mini{font-size:12px;color:var(--muted);margin-bottom:8px}
+.metaPills{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 4px}
+.metaPills span{font-size:11px;background:#efe9db;color:#5d5d5d;padding:5px 8px;border-radius:999px}
+.desc{font-size:13px;line-height:1.55;color:#2e382f}
+.guideExtra,.photoExtra{padding:0 14px 14px}
+.guideExtra details,.photoExtra details{background:#fbf7ef;border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin-top:8px}
+.guideExtra summary,.photoExtra summary{cursor:pointer;font-weight:700}
+.guideExtra ul,.photoExtra ul{padding-left:18px;margin:8px 0 0}
+.guideExtra li,.photoExtra li{margin:7px 0;line-height:1.45}
+.notice{background:#fff4d8;border:1px solid #ead59a;padding:12px;border-radius:14px;font-size:13px;line-height:1.5}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.kpi{background:#f0eadf;border-radius:16px;padding:12px;text-align:center}
+.kpi b{font-size:18px;display:block}
+.kpi span{font-size:11px;color:var(--muted)}
+.row{display:flex;gap:8px}
+.row>*{flex:1}
+.field{margin:10px 0}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px;background:white}
+.field textarea{min-height:90px}
+.checkitem{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+.checkitem:last-child{border:0}
+.checkitem.done .txt{text-decoration:line-through;color:var(--muted)}
+.checkitem .txt{flex:1}
+.modal{position:fixed;inset:0;background:rgba(12,18,14,.45);display:none;align-items:flex-end;z-index:50}
+.modal.show{display:flex}
+.sheet{background:var(--card);width:min(860px,100%);margin:auto;border-radius:28px 28px 0 0;padding:20px;max-height:88vh;overflow:auto}
+.sheet h3{margin-top:0}
+.close{float:right;border:0;background:#eee7da;width:34px;height:34px;border-radius:50%}
+.link{color:var(--accent);text-decoration:none;font-weight:650}
+.badge{display:inline-block;font-size:11px;padding:4px 7px;border-radius:999px;background:#ece7dc;margin-left:5px;color:#5f675f}
+.guideTag{display:inline-block;font-size:11px;background:#eaf0eb;color:var(--accent);padding:4px 7px;border-radius:999px;margin-left:6px}
+.noteStrip{background:#f0eadf;border-radius:16px;padding:12px;font-size:13px;line-height:1.55}
+.maplink{display:inline-block;text-decoration:none}
+
+.categoryCard{min-height:145px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(145deg,#fffdf8,#eee5d6);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:var(--shadow)}
+.categoryCard h3{font-family:Georgia,serif;font-size:22px;margin:0 0 7px}.categoryCard p{font-size:13px;line-height:1.55;color:var(--muted);margin:0 0 12px}
+.categoryHeader{display:flex;align-items:center;gap:10px;margin-bottom:12px}.categoryHeader h3{margin:0;font-size:24px;font-family:Georgia,serif}.backBtn{border:0;border-radius:12px;background:#e9eee9;color:var(--accent);padding:8px 10px;font-weight:700}
+.topicCard{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:12px}
+.topicHero{display:grid;grid-template-columns:145px 1fr;gap:14px;padding:14px}.topicImg{width:100%;height:145px;border-radius:18px;background:#ebe5d9 center/cover no-repeat;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:12px;padding:8px}
+.topicHero h4{font-size:19px;margin:0 0 4px}.topicHero .intro{font-size:13px;line-height:1.6;color:#3a433c}
+.articleToggle{width:calc(100% - 28px);margin:0 14px 14px;border:0;border-radius:14px;background:var(--accent);color:#fff;padding:11px 14px;font-weight:750;text-align:left}
+.articleBody{display:none;border-top:1px solid var(--line);padding:18px 16px 20px}.articleBody.open{display:block}
+.articleBody h5{font-size:16px;margin:18px 0 7px}.articleBody h5:first-child{margin-top:0}.articleBody p{font-size:14px;line-height:1.8;margin:0 0 13px;color:#29312c}
+.articleBody .sourceLine{font-size:12px;color:var(--muted);padding-top:8px;border-top:1px dashed var(--line);margin-top:16px}
+.workChild{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:18px;background:#fcf8f1}
+.workChildGrid{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:start}
+.workImg{width:100%;height:96px;border-radius:14px;background:#ebe5d9 center/cover no-repeat;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:12px;padding:6px}
+.workChild .childTitle{font-weight:750;margin-bottom:6px;font-size:15px}
+.workChild .childIntro{font-size:13px;line-height:1.6;color:#465048}
+.workChild p{font-size:13px;line-height:1.75;color:#374038;margin:8px 0 0}
+
+@media(min-width:780px){
+  .citygrid{grid-template-columns:repeat(4,1fr)}
+  .guideGrid,.photoGrid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hero">
+    <h1>France Trip</h1>
+    <p>18–27 September 2026 · Nice · Menton · Monaco · Grasse · Paris</p>
+    <div class="count">
+      <div class="pill">🇫🇷 10 days</div>
+      <div class="pill">📚 Deep Explore</div>
+      <div class="pill">📷 Sunset photo routes</div>
+      <div class="pill">📎 Local PDFs</div>
+    </div>
+  </div>
+
+  <main id="today" class="page active">
+    <div class="section"><h2>旅程總覽</h2><div class="sub">所有內容都可以修改；變更會儲存在這台裝置。</div></div>
+    <div class="toolbar"><button class="btn primary" onclick="openAddEvent()">＋新增行程</button><button class="btn" onclick="resetData()">還原初始資料</button></div>
+    <div id="days" class="section"></div>
+  </main>
+
+  <main id="trip" class="page">
+    <div class="section"><h2>城市與地點</h2><div class="sub">快速查看這趟旅行會經過的城市與重點。</div>
+      <div class="citygrid">
+        <div class="citycard"><b>Nice</b><p>英國人散步大道、老城、城堡山、馬蒂斯與夏卡爾。地中海藍色很適合傍晚拍攝。</p></div>
+        <div class="citycard"><b>Menton</b><p>檸檬之城、彩色老城、海岸與 Jean Cocteau。海邊與山坡階梯光線變化漂亮。</p></div>
+        <div class="citycard"><b>Monaco</b><p>摩納哥王宮、Monte-Carlo、海港、豪華街景。最適合傍晚到夜景切換。</p></div>
+        <div class="citycard"><b>Grasse</b><p>世界香水之都。Fragonard 香水工坊與香水歷史；巷弄與老建築適合白天拍。</p></div>
+        <div class="citycard"><b>Paris</b><p>羅浮宮、奧賽、歌劇院、巴黎聖母院、聖禮拜堂、瑪黑區、艾菲爾鐵塔。</p></div>
+      </div>
+    </div>
+    <div class="section">
+      <h2>重要預訂</h2>
+      <div class="card">
+        <b>⭐ 巴黎聖母院</b><p class="sub" style="margin:6px 0">加入待辦：確認開放預約日期並完成時段預約。</p>
+        <button class="btn gold" onclick="addWish('預訂巴黎聖母院時段','Paris')">加入要去 List</button>
+      </div>
+      <div class="card">
+        <b>🌸 Fragonard 香水工坊｜Grasse</b><p class="sub" style="margin:6px 0">9/21 要預訂香水體驗。</p>
+        <a class="btn primary maplink" href="https://usines-parfum.fragonard.com/en/booking/?re-product-id=39221" target="_blank">開啟官方預訂</a>
+      </div>
+    </div>
+  </main>
+
+
+  <main id="explore" class="page">
+    <div class="section">
+      <h2>Explore｜藝術、歷史與城市閱讀</h2>
+      <div class="sub">先選大分類，再點進景點或作品閱讀。每一篇都以「旅行前看得懂、現場能用」的方式整理。</div>
+      <div class="noteStrip">你不需要一次看完。到了羅浮宮就只開「羅浮宮」，到了奧賽就只開「奧賽」。每個景點下面的作品與延伸文章都會收在自己的分類裡。</div>
+      <div id="exploreCategories" class="citygrid" style="margin-top:12px"></div>
+      <div id="categoryView" style="margin-top:14px"></div>
+    </div>
+
+    <div class="section">
+      <h2>拍攝路線・日落建議</h2>
+      <div class="sub">拍攝路線會繼續保留在 Explore 下方；先讀景點，再決定哪一段最值得留在黃金時段。</div>
+      <div class="notice">9 月下旬大致可以抓：尼斯／芒通／摩納哥約 19:10–19:25 日落；巴黎約 19:35–19:45 日落。真正出發前幾天仍建議再看當日天氣、雲量與精確日落時間。</div>
+      <div id="photoGrid" class="photoGrid" style="margin-top:12px"></div>
+    </div>
+  </main>
+
+
+  <main id="tickets" class="page">
+    <div class="section"><h2>票券與 PDF</h2><div class="sub">PDF 儲存在這台裝置的瀏覽器資料庫，可自行上傳、查看、替換或刪除。</div>
+      <div id="ticketList"></div>
+      <div class="card">
+        <b>＋ 自訂 PDF</b>
+        <div class="field"><label>名稱</label><input id="customPdfName" placeholder="例如：羅浮宮門票"></div>
+        <input class="upload" type="file" id="customPdf" accept="application/pdf">
+        <button class="btn primary" onclick="document.getElementById('customPdf').click()">選擇 PDF</button>
+      </div>
+    </div>
+  </main>
+
+  <main id="more" class="page">
+    <div class="section"><h2>旅行管理</h2>
+      <div class="card">
+        <h3 style="margin-top:0">💶 花費</h3>
+        <div class="kpis"><div class="kpi"><b id="expenseTotal">€0</b><span>總花費</span></div><div class="kpi"><b id="expenseToday">€0</b><span>選定日</span></div><div class="kpi"><b id="expenseCount">0</b><span>筆數</span></div></div>
+        <div class="row"><div class="field"><label>金額 €</label><input id="expAmount" type="number" step="0.01" placeholder="24.50"></div><div class="field"><label>日期</label><input id="expDate" type="date" value="2026-09-18"></div></div>
+        <div class="row"><div class="field"><label>分類</label><select id="expCat"><option>餐飲</option><option>交通</option><option>門票</option><option>購物</option><option>住宿</option><option>咖啡</option><option>紀念品</option><option>其他</option></select></div><div class="field"><label>備註</label><input id="expNote" placeholder="例如：晚餐"></div></div>
+        <button class="btn primary" onclick="addExpense()">新增花費</button>
+        <div id="expenses"></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0">🛍 要買的東西</h3>
+        <div class="row"><div class="field"><input id="shopInput" placeholder="商品／品牌"></div><div class="field"><input id="shopPlace" placeholder="在哪裡買"></div></div>
+        <button class="btn primary" onclick="addShop()">＋加入</button>
+        <div id="shopping"></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0">❤️ 要去 List</h3>
+        <div class="row"><div class="field"><input id="wishInput" placeholder="地點"></div><div class="field"><input id="wishCity" placeholder="城市"></div></div>
+        <button class="btn primary" onclick="addWish()">＋加入</button>
+        <div id="wishlist"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="nav"><div class="navinner">
+<button class="active" data-page="today"><span class="ico">☀️</span>Today</button>
+<button data-page="trip"><span class="ico">🗓️</span>Trip</button>
+<button data-page="explore"><span class="ico">🎨</span>Explore</button>
+<button data-page="tickets"><span class="ico">🎟️</span>Tickets</button>
+<button data-page="more"><span class="ico">•••</span>More</button>
+</div></div>
+
+<div id="eventModal" class="modal"><div class="sheet">
+<button class="close" onclick="closeModal()">×</button><h3 id="modalTitle">編輯行程</h3>
+<input type="hidden" id="editId">
+<div class="row"><div class="field"><label>日期</label><input id="editDate" type="date"></div><div class="field"><label>時間</label><input id="editTime" placeholder="09:00"></div></div>
+<div class="field"><label>城市</label><input id="editCity"></div>
+<div class="field"><label>行程名稱</label><input id="editName"></div>
+<div class="field"><label>備註</label><textarea id="editNote"></textarea></div>
+<div class="field"><label>地圖／網站網址</label><input id="editLink" placeholder="https://..."></div>
+<div class="actions"><button class="btn primary" onclick="saveEvent()">儲存</button><button id="deleteBtn" class="btn danger" onclick="deleteEvent()">刪除</button></div>
+</div></div>
+
+<script>
+const initialEvents = [
+{id:"e1",date:"2026-09-18",city:"Paris / CDG",time:"10:20",name:"HND → CDG",note:"HND 10:20 起飛，CDG 17:55 抵達。",link:""},
+{id:"e2",date:"2026-09-18",city:"Paris / CDG",time:"17:55",name:"抵達巴黎・購買博物館通行證",note:"戴高樂機場購買博物館通行證。",link:""},
+{id:"e3",date:"2026-09-18",city:"Paris / CDG",time:"晚上",name:"入住 Moxy Paris Charles de Gaulle Airport",note:"機場住宿。",link:""},
+{id:"e4",date:"2026-09-19",city:"Nice",time:"08:20",name:"CDG → NICE",note:"10:00 抵達 Nice。記得在 Tickets 上傳機票 PDF。",link:""},
+{id:"e5",date:"2026-09-19",city:"Nice",time:"入住",name:"Hotel Crisol Mozart",note:"記得在 Tickets 上傳住宿 PDF。",link:""},
+{id:"e6",date:"2026-09-20",city:"Menton / Monaco",time:"全天",name:"芒通・摩納哥一日",note:"芒通老城與海岸，之後摩納哥。",link:""},
+{id:"e7",date:"2026-09-21",city:"Grasse",time:"全天",name:"格拉斯・香水體驗",note:"要預訂 Fragonard 香水工坊。",link:"https://usines-parfum.fragonard.com/en/booking/?re-product-id=39221"},
+{id:"e8",date:"2026-09-22",city:"Nice → Paris",time:"09:56",name:"Nice → Paris 火車",note:"15:51 抵達巴黎。午餐提前買好在火車上吃。記得上傳 PDF。",link:""},
+{id:"e9",date:"2026-09-22",city:"Paris",time:"下午",name:"Citadines Les Halles Paris 入住",note:"放行李。",link:""},
+{id:"e10",date:"2026-09-22",city:"Paris",time:"晚餐",name:"Le Petit Cler",note:"法式洋蔥湯／韃靼牛肉或牛排薯條／油封鴨／烤布蕾或蘭姆酒蛋糕。",link:""},
+{id:"e11",date:"2026-09-22",city:"Paris",time:"晚上",name:"艾菲爾鐵塔夜景",note:"晚餐後看夜景再回飯店。",link:""},
+{id:"e12",date:"2026-09-23",city:"Paris",time:"09:00–10:30",name:"Cédric Grolet 早餐",note:"尚未預訂。",link:""},
+{id:"e13",date:"2026-09-23",city:"Paris",time:"10:30",name:"巴黎歌劇院",note:"拍攝／參觀。",link:""},
+{id:"e14",date:"2026-09-23",city:"Paris",time:"午餐",name:"Le Bouillon Chartier",note:"",link:""},
+{id:"e15",date:"2026-09-23",city:"Paris",time:"下午",name:"巴黎聖母院＋巴黎古監獄",note:"⭐ 巴黎聖母院需預訂。",link:""},
+{id:"e16",date:"2026-09-23",city:"Paris",time:"下午茶",name:"Stohrer ＋ Tanat - Tiquetonne",note:"Stohrer：聖多諾黑、布列斯特泡芙。",link:""},
+{id:"e17",date:"2026-09-23",city:"Paris",time:"傍晚",name:"瑪黑區／孚日廣場",note:"散步。",link:""},
+{id:"e18",date:"2026-09-23",city:"Paris",time:"晚餐",name:"Table Bruno Verjus",note:"",link:""},
+{id:"e19",date:"2026-09-24",city:"Paris",time:"早餐",name:"可頌比較",note:"1) Boulangerie du Sentier：2026 best Croissant au beurre、Pain au chocolat。2) Terroirs d'Avenir：Kouign-amann。",link:""},
+{id:"e20",date:"2026-09-24",city:"Paris",time:"09:00",name:"羅浮宮",note:"拍羅浮宮／參觀。週四目前官方 09:00–18:00。",link:"https://www.louvre.fr/en/visit/hours-admission"},
+{id:"e21",date:"2026-09-24",city:"Paris",time:"午餐",name:"Creperie Parisienne Paris",note:"",link:""},
+{id:"e22",date:"2026-09-24",city:"Paris",time:"13:00",name:"聖禮拜堂 Sainte-Chapelle",note:"彩色玻璃重點。",link:""},
+{id:"e23",date:"2026-09-24",city:"Paris",time:"下午",name:"換住 Hôtel Nude Paris",note:"辦理入住／放行李。",link:""},
+{id:"e24",date:"2026-09-24",city:"Paris",time:"下午茶",name:"Pierre Hermé ＋ Motors Coffee",note:"Pierre Hermé：千層。",link:""},
+{id:"e25",date:"2026-09-24",city:"Paris",time:"傍晚",name:"凱旋門",note:"",link:""},
+{id:"e26",date:"2026-09-24",city:"Paris",time:"晚場",name:"奧賽博物館",note:"週四目前延長至 21:45。",link:"https://www.musee-orsay.fr/en/visit"},
+{id:"e27",date:"2026-09-24",city:"Paris",time:"晚餐",name:"Nossa Churrasqueira Paris 5",note:"葡萄牙料理。",link:""},
+{id:"e28",date:"2026-09-25",city:"Paris / Île-de-France",time:"早餐",name:"飯店早餐",note:"吃前一天買的早餐。",link:""},
+{id:"e29",date:"2026-09-25",city:"Giverny / Auvers / Versailles",time:"全天",name:"Klook：莫內・梵谷・凡爾賽宮",note:"整日行程。",link:""},
+{id:"e30",date:"2026-09-25",city:"Paris",time:"晚餐",name:"晚餐",note:"待決定。",link:""},
+{id:"e31",date:"2026-09-26",city:"Paris",time:"上午",name:"Galeries Lafayette 拉法葉百貨＋頂樓",note:"Chez Meunier Lafayette；PANADE 覆盆莓可頌。",link:""},
+{id:"e32",date:"2026-09-26",city:"Paris",time:"午餐",name:"Bouillon Chartier Montparnasse",note:"",link:""},
+{id:"e33",date:"2026-09-26",city:"Paris",time:"下午",name:"Saint-Germain／Le Bon Marché 逛街",note:"Christian Louboutin、Polène、Miche Poilâne 酸種麵包。",link:""},
+{id:"e34",date:"2026-09-26",city:"Paris",time:"傍晚",name:"Champ de Mars 野餐＋艾菲爾鐵塔拍攝",note:"拍攝機位：Place du Trocadéro & Gardens、L'Howea、Port Debilly 75016。另找 BOULANGERIE MODERNE 可頌。",link:""},
+{id:"e35",date:"2026-09-27",city:"Paris",time:"早餐",name:"La Maison d’Isabelle",note:"可頌。",link:""},
+{id:"e36",date:"2026-09-27",city:"Paris → Tokyo",time:"20:25",name:"CDG → HND",note:"HND 17:20 +1 抵達。",link:""}
+];
+
+
+const exploreData = [
+{
+  id:"louvre", title:"羅浮宮", subtitle:"王宮、古代文明與文藝復興",
+  desc:"先了解羅浮宮本身，再進入蒙娜麗莎、勝利女神、加納的婚宴與自由引導人民。",
+  topics:[
+    {wiki:"Louvre",title:"羅浮宮 Louvre",intro:"羅浮宮不是單純的『名畫倉庫』。它從中世紀堡壘、法國王宮一路轉變為公共博物館，因此建築本身就是法國政治與文化權力的縮影。",
+     article:[
+       ["先理解這棟建築","12 世紀末，腓力二世在巴黎西側建立防禦堡壘，當時這裡仍靠近城牆邊緣。之後巴黎向外擴張，堡壘逐漸失去軍事功能，歷代法王又不斷改建與擴建，讓羅浮宮慢慢成為宮廷空間。當你在館內走過不同翼樓，其實是在穿越幾百年的王權建築史。法國大革命後，原本屬於王室與精英的收藏逐步被轉化為公共博物館，這個轉變本身就代表『藝術屬於誰』的觀念改變。"],
+       ["第一次去怎麼看","第一次進羅浮宮最容易犯的錯，是想把整座館看完。實際上它的規模太大，最有效的方法是先選一條主線，例如從古希臘雕塑進入義大利文藝復興，再接法國 19 世紀繪畫。這樣你會看見人體藝術如何從古典理想、宗教與宮廷肖像，走到革命與現代政治。"],
+       ["現場觀察方式","不要只追著館內『最有名』標誌走。先花一點時間看宮殿空間本身，例如樓梯、天花板、窗景與長廊。羅浮宮的觀看經驗之所以特別，是因為作品與王宮建築彼此疊在一起。你看到的不是中性的白盒子，而是藝術曾經與權力、財富、外交和收藏制度緊密相連的現場。"]
+     ],
+     children:[
+       {wiki:"Mona_Lisa",title:"蒙娜麗莎 Mona Lisa",intro:"真正值得看的不是『神秘微笑』這個梗，而是達文西如何讓一張肖像變得像有呼吸一樣。",
+        body:"《蒙娜麗莎》大約創作於 16 世紀初。達文西使用極細膩的暈塗法，讓眼角、嘴角與臉部輪廓不出現生硬線條，因此表情會隨觀看距離與角度而改變。背景也不是單純的自然風景，而是一種近乎想像式的荒涼山水。人物的穩定姿勢與背後不穩定的地景形成奇妙張力。現場人很多時，不必執著站在最前排；反而可以稍微退後，看她如何在整個構圖中保持一種安靜但強烈的存在感。"},
+       {wiki:"Winged_Victory_of_Samothrace",title:"薩莫色雷斯的勝利女神",intro:"沒有頭與手，卻仍然是世界上最有動勢的雕塑之一。",
+        body:"這件希臘化時期雕塑原本立在像船首一樣的基座上，很可能與海戰勝利紀念有關。雕刻家最厲害的地方，是把看不見的風雕了出來：衣服被風吹貼在身體上，胸腹與腿部的體積因此若隱若現；另一部分衣褶又向後翻飛，讓身體像正迎著強風前進。羅浮宮把它放在大階梯頂端，觀看方式本身就強化了『抵達』與『勝利』的戲劇感。"},
+       {wiki:"The_Wedding_at_Cana",title:"加納的婚宴 The Wedding at Cana",intro:"就在蒙娜麗莎對面，尺寸巨大，卻常被大家背對著。",
+        body:"委羅內塞把《聖經》中耶穌把水變成酒的故事，轉化成一場極其華麗的威尼斯宴會。畫中有龐大建築、樂師、貴族、僕役、食物與不同服飾，像把宗教奇蹟搬進 16 世紀威尼斯的社交劇場。它最值得看的地方，是神聖事件並沒有被誇張地突出，反而被埋在一片喧鬧人群中。這種安排讓你必須主動尋找故事中心。"},
+       {wiki:"Liberty_Leading_the_People",title:"自由引導人民 Liberty Leading the People",intro:"法國革命精神最經典的視覺象徵之一，但畫的是 1830 年而不是 1789 年。",
+        body:"德拉克洛瓦描繪的是 1830 年七月革命。中央裸足女子並非某一位真實人物，而是『自由』的擬人化形象，她手持三色旗，跨越街壘與屍體向前。畫中同時有資產階級、工人、年輕學生等不同人物，使它看起來像整個社會一起投入革命。這幅畫之所以重要，是因為它把新聞事件、歷史畫的英雄構圖與政治象徵融合在一起。"},
+       {wiki:"Virgin_of_the_Rocks",title:"岩間聖母 Virgin of the Rocks",intro:"同樣是達文西，但比《蒙娜麗莎》更能看出他如何經營神秘空間與人物之間的精神連結。",
+        body:"《岩間聖母》描繪聖母、聖嬰耶穌、幼年施洗者若翰與天使置身於幽暗岩洞中的場景。達文西在這裡展現的，不只是人體與表情，而是整個空氣、濕氣、陰影與地質環境如何包覆人物。岩石背景並非單純裝飾，而像一個孕育生命與啟示的原初空間。人物之間用手勢與視線互相連結，讓宗教敘事不是靠戲劇動作，而是靠沉靜、含蓄的關係來推進。現場看時，可以特別注意那種介於真實與夢境之間的氛圍，這也是達文西最迷人的地方之一。"},
+       {wiki:"The_Virgin_and_Child_with_Saint_Anne_(Leonardo)",title:"聖母子與聖安妮 The Virgin and Child with Saint Anne",intro:"這幅作品很適合看達文西如何把家庭關係、宗教預示與柔和動態合成在一起。",
+        body:"畫面裡，聖安妮坐在後方，聖母坐在她膝前，伸手攔抱正與小羊互動的聖嬰耶穌。這種層層相套的姿態讓三個人物形成流動曲線，既穩定又充滿微妙張力。小羊象徵耶穌未來的受難，因此母子互動中其實已經埋入了宗教命運的暗示。達文西沒有把場景處理得過於戲劇化，而是讓身體扭轉、手勢和柔和表情慢慢說話。你可以把它看成達文西晚年對『親密』與『預兆』的精煉整理。"},
+       {wiki:"Grande_Odalisque",title:"大宮女 Grande Odalisque",intro:"安格爾把東方幻想、古典人體藝術與不合理比例放在一起，造就了一幅既優雅又不安的名作。",
+        body:"《大宮女》完成於 1814 年，描繪一位斜臥回望的宮女形象。她的背部被刻意拉長，手臂與骨盆比例也不符合真實人體，但正是這種『不合理』，讓整體線條變得格外流暢。安格爾追求的不是解剖學寫實，而是一種近乎音樂性的線條美感。同時，畫中的東方元素其實屬於 19 世紀歐洲想像中的『異國情調』，並非真實中東室內寫生。這幅畫很值得用來理解法國新古典主義如何轉向更感官、更帶幻想色彩的畫面。"},
+       {wiki:"The_Coronation_of_Napoleon",title:"拿破崙加冕 The Coronation of Napoleon",intro:"這是一幅超大型政治形象工程，不只是紀錄事件，更是在替拿破崙重新書寫合法性。",
+        body:"雅克—路易・大衛以極其壯觀的尺度描繪 1804 年拿破崙在巴黎聖母院加冕的場景。畫裡最關鍵的一刻，是拿破崙正在為約瑟芬加冕，而不是由教宗親手為自己加冕。這個選擇其實經過精心安排：它一方面表現皇權神聖化，另一方面又傳達權力來自拿破崙自身，而不完全依賴教會授予。畫面裡每一位人物、服裝、視線與座位配置都具有政治含義。當你站在真作前，最震撼的往往是它如何把歷史、戲劇與宣傳融合成一個近乎舞台表演般的瞬間。"}
+     ], source:"Louvre 官方館藏與博物館資料"}
+  ]
+},
+{
+  id:"orsay", title:"奧賽博物館", subtitle:"印象派、現代巴黎與 19 世紀",
+  desc:"先理解奧賽為何從火車站變成博物館，再讀雷諾瓦、梵谷、竇加與印象派。",
+  topics:[
+    {wiki:"Mus%C3%A9e_d%27Orsay",title:"奧賽博物館 Musée d'Orsay",intro:"這裡最適合用來理解『現代藝術是怎麼出現的』，因為它正好卡在學院傳統與 20 世紀現代主義之間。",
+     article:[
+       ["從火車站到博物館","奧賽建築最初是為 1900 年巴黎世界博覽會興建的火車站。到了 20 世紀後，長途列車規格改變，車站逐漸失去原有功能，最後轉型成博物館。今天走進中央大廳，你仍然可以感受到火車站那種巨大而連續的空間感。這和羅浮宮的王宮式空間很不同，也讓 19 世紀藝術看起來更貼近都市、工業與現代生活。"],
+       ["為什麼印象派會在這裡變得有意義","19 世紀巴黎快速現代化：街道拓寬、咖啡館、百貨公司、劇院、火車、郊區旅行與新的中產休閒生活都在出現。印象派不是單純『畫得模糊』，而是他們正在回應一個移動速度更快、光線經驗更多、生活場景更現代的世界。"],
+       ["你可以怎麼看","把注意力放在光、瞬間與構圖。莫內會讓同一個主題因不同時間與天氣而變化；竇加常像攝影快照一樣切掉人物；雷諾瓦則把城市社交與人群畫成柔軟而明亮的場景。當你把這些作品放在一起看，就會理解『印象派』其實不是一種單一畫法，而是一群藝術家對現代生活的不同回答。"]
+     ],
+     children:[
+       {wiki:"Bal_du_moulin_de_la_Galette",title:"煎餅磨坊的舞會 Bal du moulin de la Galette",intro:"這不是宮廷舞會，而是 1870 年代蒙馬特的都市休閒生活。",
+        body:"雷諾瓦在 1876 年畫下這幅作品，隔年於印象派展覽公開。奧賽官方目前標示這件作品未在常設展廳展出；你 9/24 到館前要再確認當日展出位置或是否因展覽調度而移動。畫面裡有他的朋友，也有普通舞客，但真正主角其實是『氣氛』。樹葉間的陽光打在人群上，形成一塊塊不規則亮點；室外自然光與舞場人工照明混在一起，人物輪廓因此不像古典繪畫那樣清楚。當時批評者有人認為這種處理讓形體像融化，但今天我們反而會把它視為印象派最重要的特色之一：世界不是靜止的，光也不是固定的。作品描寫的還是同時代巴黎人的日常娛樂，因此它把原本常用來描繪歷史或宗教的大尺寸畫布，拿來畫普通人的現代生活。"},
+       {wiki:"Starry_Night_Over_the_Rh%C3%B4ne",title:"隆河上的星夜 Starry Night Over the Rhône",intro:"梵谷在亞爾畫的夜景，比《星夜》更接近他親眼所見。",
+        body:"1888 年梵谷移居南法亞爾後，開始高度著迷於夜色如何被黃色燈光照亮。《隆河上的星夜》把深藍天空、星光與城市煤氣燈的黃色反射放在一起。你會看到水面上的光不是精確鏡像，而是被拉成長長的色帶，像情緒而不是物理學。前景的小情侶讓巨大夜空和河流有了人的尺度。這幅畫也很適合和你在南法實際看到的夜色連結起來：梵谷並不是逃避現實，而是在尋找比日常更強烈的感知。"},
+       {wiki:"Edgar_Degas",title:"竇加 Degas：為什麼人物常被切掉？",intro:"他的畫很像攝影瞬間，卻又是高度設計的構圖。",
+        body:"竇加經常畫芭蕾舞者、排練室、浴女與城市室內空間。他的構圖常把人物截在畫框之外，或把主要人物放到很偏的位置，這種方法與 19 世紀攝影以及日本浮世繪都有關。觀看他的作品時，可以注意『不完整』反而製造了真實感，好像你只是剛好走過，看見一個正在發生的瞬間。"},
+       {wiki:"The_Gleaners",title:"拾穗 The Gleaners",intro:"米勒把最普通的農村勞動，畫成了 19 世紀法國最有份量的社會圖像之一。",
+        body:"《拾穗》描繪三位彎腰在田裡撿拾遺穗的農婦。這是收成後最底層、最辛苦的工作，通常屬於貧窮者才會從事的勞動。米勒把她們放在畫面前景，使觀眾不得不正視這種勞動姿態本身；而遠處堆滿穀物與富裕收成場景，則構成鮮明對比。這幅畫的重要性，在於它沒有把農民浪漫化成田園裝飾，而是以極有尊嚴、沉重而安靜的方式呈現社會現實。"},
+       {wiki:"The_Angelus_(painting)",title:"晚禱 The Angelus",intro:"兩位農民在黃昏田野中停下工作祈禱，讓日常勞作與宗教節奏緊密連在一起。",
+        body:"《晚禱》描繪一對農民在田裡因教堂鐘聲而停下工作、低頭祈禱的瞬間。畫面非常安靜，但並不輕鬆；它讓人感受到一種被勞動、土地、暮色與信仰共同包圍的生活節奏。米勒沒有把農村表現得華麗，反而讓人物的沉默姿勢成為情感核心。對 19 世紀觀眾來說，這樣的場景既帶有宗教熟悉感，也暗示了農村生活的艱辛與規律。"},
+       {wiki:"Two_Young_Girls_at_the_Piano",title:"彈鋼琴的少女 Two Young Girls at the Piano",intro:"雷諾瓦在這件作品裡，把家庭室內、音樂教育與柔和色彩結合成一幅極親密的畫面。",
+        body:"兩位少女圍在鋼琴旁，一人演奏、一人俯身閱讀樂譜。雷諾瓦把人物的肌膚、髮絲、衣料與室內光線處理得非常柔軟，讓整個畫面充滿溫暖而親近的氣氛。這不只是漂亮的家庭畫，也反映 19 世紀法國中產家庭對教養、音樂與女性教育的理想想像。你可以把它和《煎餅磨坊的舞會》對照：同樣是雷諾瓦，一幅描寫公共社交空間，一幅則轉向私密的室內世界。"},
+       {wiki:"Water_Lily_Pond_(Monet_series)",title:"睡蓮池 Water Lily Pond",intro:"莫內不只是畫池塘，而是在研究光線、倒影與觀看如何把世界變成顏色的震動。",
+        body:"莫內在吉維尼花園長期觀察睡蓮池與日本橋，反覆描繪不同光線、季節與氣候下的水面狀態。當你看《睡蓮池》時，真正的主角不是植物本身，而是倒影如何讓天空、樹葉、水面邊界彼此混合。這也是莫內走向晚期風格的重要一步：物體輪廓不再最重要，感知與時間的流動反而成為畫面核心。"},
+       {wiki:"Self-Portrait_(Van_Gogh,_Paris)",title:"梵谷自畫像 Self-Portrait",intro:"梵谷的自畫像不是自戀，而是一種自我觀察與畫法實驗。",
+        body:"梵谷在不同時期畫過多幅自畫像，巴黎時期的作品尤其值得看，因為你會清楚感覺到他吸收了印象派與新印象派的色彩刺激。背景與臉部常由短促、有方向性的筆觸構成，讓人物表面像在震動。梵谷畫自己，一方面是因為模特兒成本低，另一方面也像不斷測試自己如何用色、如何在畫布上建立精神張力。現場看時，不妨留意他的眼神並不是單純凝視觀眾，而像在把自己也當作需要被理解的對象。"},
+       {wiki:"Noon:_Rest_from_Work",title:"午睡 Noon: Rest from Work",intro:"米勒在田間勞動主題之外，也畫出了勞動之後短暫而珍貴的休息。",
+        body:"《午睡》描繪農人在田邊短暫休息的時刻。和《拾穗》那種持續勞作的緊繃感不同，這幅畫更安靜，也更帶有午後熱氣瀰漫的感覺。人物睡去時，四周的土地與乾草幾乎一起沉靜下來，讓休息不只是動作停止，而像整個世界暫時放慢。米勒很擅長把農民生活畫得有份量，這種份量來自他對勞動節奏與身體疲憊的深刻理解。"}
+     ], source:"Musée d'Orsay 官方館藏與展覽資料"}
+  ]
+},
+{
+  id:"paris", title:"巴黎古蹟與城市", subtitle:"哥德式、王權、革命與現代巴黎",
+  desc:"巴黎歌劇院、聖母院、古監獄、聖禮拜堂、瑪黑、孚日廣場、凱旋門與艾菲爾鐵塔。",
+  topics:[
+    {wiki:"Palais_Garnier",title:"巴黎歌劇院 Palais Garnier",intro:"它不是只有『很華麗』，而是第二帝國巴黎如何展示權力、財富與公共生活的代表建築。",
+     article:[["城市舞台","歌劇院由建築師 Charles Garnier 設計，19 世紀後半完工。它所在的城市環境與奧斯曼改造巴黎密切相關：寬闊大道讓建築正面成為遠距離就能看見的都市焦點。進到室內後，大階梯、鏡面、金色裝飾與包廂，不只是為了看表演，也是在讓觀眾彼此觀看。歌劇院因此同時是藝術場所與社交舞台。"],["現場怎麼看","外觀可以先觀察雕塑、柱式與屋頂層次；室內最值得停的是大階梯與 Grand Foyer。不要急著只拍金色裝潢，試著想像 19 世紀巴黎人穿著正式服裝在這裡交際，會更能理解建築為什麼如此誇張。"]],children:[],source:"Opéra national de Paris"},
+    {wiki:"Notre-Dame_de_Paris",title:"巴黎聖母院 Notre-Dame",intro:"巴黎哥德式建築核心，也是理解中世紀巴黎最直接的入口。",
+     article:[["哥德式真正厲害的地方","哥德式建築的重點不只是尖拱，而是整個結構系統如何把重量導向外側，使牆面能開出更大的窗。飛扶壁就是這套技術的視覺化結果。當牆變薄、窗變大，教堂內部就能獲得更多彩色光線。這種向上延伸的空間，也被用來表達神聖感。"],["為什麼它對巴黎這麼重要","聖母院從 12 世紀開始建造，見證王室典禮、宗教生活、革命破壞與 19 世紀修復。Victor Hugo 的小說《鐘樓怪人》也曾大幅提升大眾對這座建築的關注。2019 年火災後的大規模修復，又讓它成為當代法國文化遺產保存的象徵。"]],children:[],source:"巴黎聖母院與法國文化遺產公開資料"},
+    {wiki:"Conciergerie",title:"巴黎古監獄 Conciergerie",intro:"同一座西岱島王宮，從王權中心變成革命時期的監獄。",
+     article:[["從王宮到監獄","Conciergerie 原本是中世紀王宮的一部分。王室逐漸把主要居所移走後，這裡轉為行政與司法空間。法國大革命時期，大量囚犯在此等待審判，其中最知名的是瑪麗・安東妮。"],["和聖禮拜堂一起看","把 Conciergerie 和旁邊的 Sainte-Chapelle 排在同一天很有意義：一邊代表中世紀王權最神聖、華麗的一面，另一邊則讓你看到同一政治中心在幾百年後如何成為革命司法機器的一部分。"]],children:[],source:"Centre des monuments nationaux"},
+    {wiki:"Sainte-Chapelle",title:"聖禮拜堂 Sainte-Chapelle",intro:"最接近『由彩色玻璃構成的建築』的一次體驗。",
+     article:[["為什麼窗這麼多","聖禮拜堂在 13 世紀由路易九世興建，用來保存重要聖髑。上層禮拜堂幾乎把牆面轉化成彩色玻璃，建築結構被壓縮成纖細柱件，讓人產生整個空間都是光的錯覺。"],["中午去的意義","你安排 13:00 很合理，因為白天光線較強時彩窗最有存在感。現場不要只抬頭拍大全景，也可以慢慢看玻璃敘事：它們像一本巨大的圖像聖經，把宗教故事分格呈現。"]],children:[],source:"Centre des monuments nationaux"},
+    {wiki:"Le_Marais",title:"瑪黑區 Le Marais",intro:"巴黎少數仍能感受到中世紀街巷尺度與貴族宅邸歷史的區域。",
+     article:[["為什麼和巴黎其他地方不同","19 世紀奧斯曼改造讓巴黎大量出現筆直大道，但瑪黑保留較多舊街巷與私人宅邸。這裡曾是貴族集中區，後來也與猶太社群、工藝、時尚與 LGBTQ+ 文化密切相關。"],["怎麼逛才有感","不要只把它當購物區。你可以觀察街道寬度、石造宅邸的庭院入口、老招牌與人流變化。瑪黑最適合慢走，而不是用『打卡景點』方式快速穿越。"]],children:[],source:"巴黎城市歷史公開資料"},
+    {wiki:"Place_des_Vosges",title:"孚日廣場 Place des Vosges",intro:"巴黎最完整、最有秩序感的早期王家廣場之一。",
+     article:[["空間為什麼舒服","廣場四周以規整紅磚與石材立面包圍，中間是一塊綠地。這種高度一致、立面連續的設計，讓空間像一個巨大的城市客廳。"],["旅行時怎麼看","在瑪黑逛累時，這裡適合停下來感受巴黎廣場文化。比起只拍正中央，走到拱廊裡看光影、商店與人群會更有層次。"]],children:[],source:"巴黎城市歷史公開資料"},
+    {wiki:"Arc_de_Triomphe",title:"凱旋門 Arc de Triomphe",intro:"它把拿破崙帝國、國家記憶與現代巴黎交通軸線疊在一起。",
+     article:[["不是只有觀景台","拿破崙下令興建凱旋門，用來紀念法軍與軍事勝利。後來它又成為國家紀念場所，拱門下方設有無名戰士墓。這使凱旋門從帝國宣傳建築，逐漸轉化為全國性記憶象徵。"],["站在這裡看巴黎","從凱旋門周邊或頂部看出去，可以明顯理解巴黎的大道放射結構。香榭麗舍大道只是其中一條，整個星形交通節點正是現代巴黎城市設計最直觀的畫面。"]],children:[],source:"Centre des monuments nationaux"},
+    {wiki:"Eiffel_Tower",title:"艾菲爾鐵塔 Eiffel Tower",intro:"今天是巴黎象徵，但 1889 年剛出現時，它其實非常具爭議。",
+     article:[["為什麼當初有人討厭它","艾菲爾鐵塔為 1889 年世界博覽會而建，以大量鐵構件公開展示工業時代的工程技術。對習慣石造古典建築的人來說，這種巨大金屬骨架非常陌生，當時甚至有藝術家公開反對。"],["後來為什麼留下","原本它並非被想像成永久建築，但後來因科學實驗、無線電通訊價值與城市象徵性而被保留。今天它最有趣的地方，是一座曾被批評『太現代』的建築，反而成為最傳統的巴黎印象。"]],children:[],source:"Eiffel Tower 官方歷史資料"}
+  ]
+},
+{
+  id:"daytrip", title:"巴黎近郊", subtitle:"凡爾賽、莫內與梵谷",
+  desc:"9/25 的 Klook 一日：凡爾賽宮、莫內吉維尼、梵谷奧維爾。",
+  topics:[
+    {wiki:"Palace_of_Versailles",title:"凡爾賽宮 Château de Versailles",intro:"如果只把凡爾賽看成『很豪華的宮殿』，會錯過它最重要的政治意義。",
+     article:[["權力如何變成空間","路易十四把宮廷集中到凡爾賽，不只是追求奢華，而是透過空間與禮儀管理貴族。誰能接近國王、站在哪裡、參加什麼儀式，都變成政治權力的一部分。鏡廳、國王套房與巨大花園共同建立一種『國王就是秩序中心』的視覺感。"],["花園也在談權力","凡爾賽花園使用強烈幾何軸線、修剪整齊的植物與長距離視線，把自然整理成可控制的形式。這其實和宮廷政治很像：自然與人都被放進一套秩序裡。"]],children:[],source:"Château de Versailles 官方資料"},
+    {wiki:"Giverny",title:"吉維尼 Giverny｜莫內花園",intro:"看莫內的花園，最重要的是理解它不是單純『漂亮庭院』，而是他長期製造繪畫題材的工作室。",
+     article:[["花園就是作品的一部分","莫內晚年長期居住吉維尼，主動設計花園、水池、睡蓮與日本橋。這些景觀不是被動等待他描繪，而是他為了觀看、研究光與色彩而建立的環境。"],["看睡蓮系列的方法","莫內晚期作品越來越少明確地平線，水面、倒影、天空和植物混在一起。你在花園現場會更理解這件事：他畫的不只是花，而是水面不斷變化的光、反射與時間。"]],children:[],source:"Fondation Claude Monet 與藝術史公開資料"},
+    {wiki:"Auvers-sur-Oise",title:"奧維爾 Auvers-sur-Oise｜梵谷最後歲月",intro:"梵谷生命最後數月在這裡完成大量作品，因此整個小鎮像一張他畫中的地圖。",
+     article:[["最後的創作爆發","1890 年梵谷來到 Auvers-sur-Oise，在醫生 Paul Gachet 照看下生活。他在極短時間內大量作畫，題材包含教堂、麥田、村莊街景與人物。這些作品常有強烈筆觸、扭曲透視與不穩定空間感。"],["現場如何和畫連起來","如果導覽會帶你看教堂或田野，不要只追求『和畫一模一樣』。更值得注意的是梵谷如何把普通村莊轉化成帶有強烈情緒的畫面：建築線條會彎曲，天空與田地像在流動。"]],children:[],source:"Auvers-sur-Oise 與梵谷生平公開資料"}
+  ]
+},
+{
+  id:"south", title:"南法與蔚藍海岸", subtitle:"Nice、Menton、Monaco、Grasse",
+  desc:"把南法看懂：義法交界、地中海城市、摩納哥王國與香水之都。",
+  topics:[
+    {wiki:"Nice",title:"尼斯 Nice",intro:"尼斯之所以和巴黎感覺完全不同，關鍵在於它長期處在法國與義大利文化交界。",
+     article:[["法國城市中的義大利氣質","尼斯直到 1860 年才正式併入法國。在此之前，它長期與薩伏依王朝和義大利文化圈關係密切，因此老城的色彩、街道尺度與飲食都比巴黎更有地中海與義大利氣質。"],["海岸如何塑造城市","Promenade des Anglais 不只是散步大道，也反映 19 世紀冬季旅遊興起。來自英國等北歐地區的富裕旅客開始把尼斯當成避寒地，海濱逐漸成為城市身份核心。今天你拍到的棕櫚樹、飯店、海灣與散步人群，其實都是近代度假文化的產物。"]],children:[],source:"Nice Côte d’Azur 旅遊與城市歷史資料"},
+    {wiki:"Menton",title:"芒通 Menton",intro:"彩色老城、檸檬與陡坡海岸，讓芒通成為最有『義法邊境感』的城市。",
+     article:[["為什麼這麼有義大利感","芒通緊鄰義大利，歷史上也曾與摩納哥和薩丁尼亞王國相關。老城沿山坡上升，建築以黃、橘、粉紅等暖色調排列，從海邊回望會形成非常完整的層疊景觀。"],["檸檬不是觀光噱頭","芒通擁有溫暖微氣候，柑橘種植歷史長，因此檸檬逐漸成為城市標誌。今天的檸檬節雖然高度觀光化，但背後仍建立在真正的農業與地方氣候條件上。"]],children:[],source:"Menton Riviera & Merveilles 旅遊資料"},
+    {wiki:"Monaco",title:"摩納哥 Monaco",intro:"世界第二小主權國家，把王室、金融、豪華旅遊與極端密集城市空間擠在一起。",
+     article:[["為什麼它是一個國家","摩納哥由 Grimaldi 家族長期統治，今天仍是獨立公國。它的土地非常小，因此城市向山坡與海岸高度密集發展。王宮、Monte-Carlo、港口與豪宅距離都不遠，卻代表完全不同的城市功能。"],["Monte-Carlo 的形象如何形成","19 世紀建立賭場與豪華旅遊設施後，Monte-Carlo 逐步成為歐洲上流社會與度假文化象徵。今天的超跑、遊艇與精品形象不是偶然，而是這套 19 世紀觀光與金融策略的延續。"]],children:[],source:"Visit Monaco 官方資料"},
+    {wiki:"Grasse",title:"格拉斯 Grasse",intro:"真正理解格拉斯，要先知道它原本和皮革工業有關，而不是一開始就以香水聞名。",
+     article:[["從臭皮革到香水","格拉斯早期是皮革與手套製造中心。為了掩蓋皮革氣味，香氛手套逐漸流行，加上周邊氣候適合種植玫瑰、茉莉等芳香植物，香水產業便慢慢建立。"],["你在工坊可以注意什麼","參加香水體驗時，可以把香味想成時間結構。前調最先出現但消散快，中調構成主題，後調則停留最久。真正高明的配方不是單一香味漂亮，而是不同材料隨時間轉換時仍能保持完整性。"]],children:[
+       {wiki:"Fragonard_Parfumeur",title:"Fragonard 香水工坊",intro:"你 9/21 要預訂的體驗，可以把它當成『鼻子的美術館』。",
+        body:"Fragonard 是格拉斯最知名的香水品牌與工坊之一。參觀時不要急著判斷『喜歡／不喜歡』，可以先分辨柑橘、花香、木質、辛香、樹脂與麝香等大方向，再觀察它們在幾分鐘後如何變化。如果有調香體驗，建議記下每次加入材料的比例與感受，最後你會更理解香水其實是一種看不見的構圖。"}
+     ],source:"Grasse 與 Fragonard 公開資料"}
+  ]
+},
+{
+  id:"shopping", title:"巴黎購物與建築", subtitle:"Galeries Lafayette、Saint-Germain、Le Bon Marché",
+  desc:"你行程裡的購物點也有城市與建築故事，不只是買東西。",
+  topics:[
+    {wiki:"Galeries_Lafayette",title:"Galeries Lafayette 拉法葉百貨",intro:"巴黎百貨公司是現代消費文化的重要發明之一，而拉法葉本身就是 Belle Époque 商業建築代表。",
+     article:[["百貨公司為什麼重要","19 世紀後期，巴黎百貨公司把大量商品、固定價格、展示櫃、餐飲與休閒整合在同一棟建築裡，改變人們逛街方式，也讓城市中產階級尤其是女性擁有新的公共活動空間。"],["頂樓值得看什麼","你排了頂樓，非常值得。從這裡能看到歌劇院、巴黎屋頂與艾菲爾鐵塔方向，剛好可以把前幾天走過的城市軸線重新拼起來。"]],children:[],source:"Galeries Lafayette 與巴黎商業史公開資料"},
+    {wiki:"Saint-Germain-des-Pr%C3%A9s",title:"Saint-Germain-des-Prés",intro:"今天是精品與咖啡街區，但它的文化形象來自修道院、出版社、文學與戰後知識分子。",
+     article:[["為什麼這區很『巴黎』","Saint-Germain 既有古老教堂，也有 20 世紀咖啡館文化。二戰後，哲學家、作家、出版社與藝術圈在這一帶形成強烈文化形象，因此今天即使商業化很高，仍帶著『文學巴黎』的品牌。"],["逛街時怎麼看","除了店面，可以留意街道尺度、石造立面、老咖啡館招牌與書店。這區適合慢走，不需要追很多景點。"]],children:[],source:"巴黎城市文化史公開資料"},
+    {wiki:"Le_Bon_March%C3%A9",title:"Le Bon Marché",intro:"常被視為世界最早的現代百貨公司之一，也是理解巴黎消費文化很好的地方。",
+     article:[["商業空間的革命","Le Bon Marché 在 19 世紀發展出固定價格、退換貨、季節促銷、大量商品展示等現代百貨制度。這不只是購物方式改變，也改變了城市生活、廣告與消費者心理。"],["你這次怎麼逛","你主要會看 Christian Louboutin、Polène 等品牌，但可以順便觀察整棟百貨如何用挑高空間、光線與動線讓購物變成一種生活體驗。"]],children:[],source:"Le Bon Marché 與百貨史公開資料"}
+  ]
+}
+];
+
+function toggleArticle(id){
+  const el=document.getElementById(id);
+  el.classList.toggle("open");
+}
+async function renderCategories(){
+  const box=document.getElementById("exploreCategories");
+  if(box.dataset.loaded==="1") return;
+  box.innerHTML=exploreData.map(c=>`
+    <button class="categoryCard" onclick="openCategory('${c.id}')" style="text-align:left;border:1px solid var(--line)">
+      <div><h3>${esc(c.title)}</h3><p>${esc(c.subtitle)}</p></div>
+      <div class="desc">${esc(c.desc)}</div>
+    </button>`).join("");
+  box.dataset.loaded="1";
+}
+
+async function openCategory(id){
+  const c=exploreData.find(x=>x.id===id); if(!c) return;
+  const box=document.getElementById("categoryView");
+  box.innerHTML=`<div class="categoryHeader"><button class="backBtn" onclick="closeCategory()">← 大分類</button><h3>${esc(c.title)}</h3></div><div class="sub" style="margin-bottom:12px">${esc(c.subtitle)}</div><div id="topicMount"></div>`;
+  const mount=document.getElementById("topicMount");
+  for(let i=0;i<c.topics.length;i++){
+    const t=c.topics[i];
+    const data=await wikiSummary(t.wiki);
+    const img=data.thumbnail?.source||"";
+    const articleId=`article_${id}_${i}`;
+    const articleHtml=(t.article||[]).map(sec=>`<h5>${esc(sec[0])}</h5><p>${esc(sec[1])}</p>`).join("");
+    let childrenHtml="";
+    if(t.children && t.children.length){
+      let parts=[];
+      for(const ch of t.children){
+        const chData = await wikiSummary(ch.wiki);
+        const chImg = chData.thumbnail?.source || "";
+        parts.push(`
+          <div class="workChild">
+            <div class="workChildGrid">
+              <div class="workImg" style="${chImg?`background-image:url('${chImg.replace(/'/g,"\'")}')`:''}">${chImg?'':'圖片需連網'}</div>
+              <div>
+                <div class="childTitle">${esc(ch.title)}</div>
+                <div class="childIntro">${esc(ch.intro)}</div>
+                <p>${esc(ch.body)}</p>
+              </div>
+            </div>
+          </div>
+        `);
+      }
+      childrenHtml = `<h5>館內作品／延伸閱讀</h5>${parts.join("")}`;
+    }
+    const card=document.createElement("div"); card.className="topicCard";
+    card.innerHTML=`<div class="topicHero">
+      <div class="topicImg" style="${img?`background-image:url('${img.replace(/'/g,"\'")}')`:''}">${img?'':'圖片需連網'}</div>
+      <div><h4>${esc(t.title)}</h4><div class="intro">${esc(t.intro)}</div></div>
+    </div>
+    <button class="articleToggle" onclick="toggleArticle('${articleId}')">閱讀完整介紹 ▾</button>
+    <div class="articleBody" id="${articleId}">
+      ${articleHtml}
+      ${childrenHtml}
+      <div class="sourceLine">資料脈絡：${esc(t.source||"官方與博物館公開資料")}。圖片以公開百科縮圖輔助辨識；出發前若作品展出位置變動，以館方當日資訊為準。</div>
+    </div>`;
+    mount.appendChild(card);
+  }
+  box.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function closeCategory(){
+  document.getElementById("categoryView").innerHTML="";
+  document.getElementById("exploreCategories").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+const photoData = [
+{
+  wiki:"Eiffel_Tower",
+  imageWiki:"Eiffel_Tower",
+  title:"9/22 巴黎第一晚｜艾菲爾鐵塔夜景",
+  subtitle:"晚餐後最值得的第一個夕景路線",
+  timing:"建議 18:45 抵達第一機位｜日落約 19:40 前後｜藍調 19:45–20:10",
+  route:["Place du Trocadéro & Gardens：先拍最經典正面大景。","Champ de Mars：拉遠拍整塔與草地。","Port Debilly：橋邊與塞納河構圖，適合夜景。"],
+  tips:["如果天黑後整點遇到閃燈，停留 5 分鐘很值得。","先拍逆光剪影，再拍藍調時段的鐵塔亮燈。","第一晚建議不要排太滿，專心把一組夜景拍完整。"]
+},
+{
+  wiki:"Palais_Garnier",
+  imageWiki:"Palais_Garnier",
+  title:"9/23 歌劇院 → 聖母院 → 瑪黑",
+  subtitle:"城市街拍與建築細節日",
+  timing:"上午歌劇院外觀｜下午 15:00 後河岸與瑪黑光線較柔",
+  route:["巴黎歌劇院：先拍正面、雕像、屋頂細節。","巴黎聖母院周邊：從橋上與河岸拍外觀。","瑪黑區／孚日廣場：抓街景、拱廊與日常氛圍。"],
+  tips:["歌劇院早一點到，可避開人潮。","聖母院不是只拍正面，側面飛扶壁更有哥德式味道。","瑪黑適合拍人物與街景生活感，不必只追大景。"]
+},
+{
+  wiki:"Louvre",
+  imageWiki:"Louvre",
+  title:"9/24 羅浮宮＋聖禮拜堂＋奧賽",
+  subtitle:"藝術感最濃的一天",
+  timing:"08:30 外觀先拍｜13:00 彩窗最亮｜18:45 可抓凱旋門日落邊緣光｜20:00 奧賽館內夜景感",
+  route:["羅浮宮玻璃金字塔：早上人少，適合乾淨畫面。","聖禮拜堂：以室內彩窗和仰拍為主。","凱旋門：若時間夠，上方或周邊抓夕陽色溫。","奧賽：大鐘與館內長廊很適合夜間氛圍。"],
+  tips:["羅浮宮建議先拍外觀再進館。","聖禮拜堂偏室內拍攝，手機也可拍，但把亮度壓低一點保留窗色。","奧賽晚上重點不是『全景』，而是利用燈光與空間層次。"]
+},
+{
+  wiki:"Menton",
+  imageWiki:"Menton",
+  title:"9/20 芒通／摩納哥",
+  subtitle:"海岸線與彩色老城",
+  timing:"芒通老城上午或傍晚最漂亮｜摩納哥晚下午到入夜",
+  route:["芒通海邊：先拍整座老城堆疊感。","芒通老城階梯與巷子：拍色塊與窗台。","摩納哥海港／Monte-Carlo：傍晚拍港灣與城市燈光切換。"],
+  tips:["芒通適合暖色調與生活感。","摩納哥適合拍豪華街景、海港與建築反光。","若時間緊，芒通抓海邊大全景、摩納哥抓港灣夕景最划算。"]
+},
+{
+  wiki:"Nice",
+  imageWiki:"Nice",
+  title:"尼斯／格拉斯延伸拍攝",
+  subtitle:"如果想多補地中海照片",
+  timing:"Nice 黃金時段 18:20–19:10｜Grasse 則以白天巷弄光影為主",
+  route:["Nice Promenade des Anglais：海岸線、浪花、散步人群。","Castle Hill 或高處視角：拍海灣弧線。","Grasse 老城／香水工坊周邊：白天巷弄與招牌。"],
+  tips:["尼斯傍晚逆光很美，適合剪影。","格拉斯不是追日落城市，更適合白天細節、瓶罐、店面與巷子。","若只留一個海景時段，優先留給 Nice。"]
+},
+{
+  wiki:"Eiffel_Tower",
+  imageWiki:"Eiffel_Tower",
+  title:"9/26 艾菲爾鐵塔野餐拍攝日",
+  subtitle:"把你列的機位串成一條順路線",
+  timing:"18:10 在 Champ de Mars 野餐｜19:00 到 Trocadéro｜19:25 Port Debilly｜19:45 藍調",
+  route:["Champ de Mars：草地與野餐氛圍。","Place du Trocadéro & Gardens：經典對稱大景。","L'Howea 附近：咖啡／街景視角。","Port Debilly：橋與河面倒影，最適合收尾。"],
+  tips:["野餐照可以先拍食物與鐵塔同框，再拍人物。","Trocadéro 人多，建議以『快拍完成』為目標。","Port Debilly 晚一點到，最適合收夜景。"]
+}
+];
+
+const ticketSlots = [
+{id:"flight0919",icon:"✈️",title:"9/19 CDG → NICE",sub:"08:20 → 10:00"},
+{id:"hotelNice",icon:"🏨",title:"Hotel Crisol Mozart",sub:"Nice 住宿"},
+{id:"train0922",icon:"🚆",title:"9/22 Nice → Paris",sub:"09:56 → 15:51"},
+{id:"flight0927",icon:"✈️",title:"9/27 CDG → HND",sub:"20:25 → 17:20 +1"}
+];
+
+const weekdays = ["日","一","二","三","四","五","六"];
+let events = JSON.parse(localStorage.getItem("franceEvents")||"null") || initialEvents;
+let expenses = JSON.parse(localStorage.getItem("franceExpenses")||"[]");
+let shopping = JSON.parse(localStorage.getItem("franceShopping")||"null") || [
+{text:"香水",place:"Grasse",done:false},{text:"博物館明信片",place:"Paris",done:false},{text:"Miche Poilâne 酸種麵包",place:"Saint-Germain",done:false}
+];
+let wishes = JSON.parse(localStorage.getItem("franceWishes")||"null") || [
+{text:"預訂巴黎聖母院時段",city:"Paris",done:false},{text:"Fragonard 香水工坊",city:"Grasse",done:false},{text:"Place du Trocadéro 拍攝",city:"Paris",done:false}
+];
+
+function saveAll(){
+ localStorage.setItem("franceEvents",JSON.stringify(events));
+ localStorage.setItem("franceExpenses",JSON.stringify(expenses));
+ localStorage.setItem("franceShopping",JSON.stringify(shopping));
+ localStorage.setItem("franceWishes",JSON.stringify(wishes));
+}
+function esc(s){return (s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function mapUrl(q){return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`}
+function renderDays(){
+ const container=document.getElementById("days"); container.innerHTML="";
+ for(let d=18;d<=27;d++){
+   const date=`2026-09-${String(d).padStart(2,"0")}`;
+   const list=events.filter(e=>e.date===date);
+   if(!list.length) continue;
+   const dt=new Date(date+"T12:00:00"); const city=[...new Set(list.map(e=>e.city))].join(" · ");
+   const card=document.createElement("div"); card.className="card day";
+   card.innerHTML=`<div class="datebox"><b>${d}</b><span>9月・週${weekdays[dt.getDay()]}</span></div>
+   <div class="daybody"><div class="daytitle">Day ${d-17}</div><div class="city">${esc(city)}</div>
+   ${list.map(e=>`<div class="event"><div class="time">${esc(e.time)}</div><div class="name">${esc(e.name)}</div><div class="note">${esc(e.note)}</div>
+   <div class="actions">
+      ${e.link?`<a class="btn maplink" href="${esc(e.link)}" target="_blank">開啟連結</a>`:""}
+      <a class="btn maplink" href="${mapUrl(e.name+' '+e.city)}" target="_blank">地圖</a>
+      <button class="btn" onclick="editEvent('${e.id}')">編輯</button>
+   </div></div>`).join("")}</div>`;
+   container.appendChild(card);
+ }
+}
+function openAddEvent(){
+ document.getElementById("modalTitle").textContent="新增行程"; document.getElementById("editId").value="";
+ document.getElementById("editDate").value="2026-09-18"; document.getElementById("editTime").value="";
+ document.getElementById("editCity").value="";document.getElementById("editName").value="";document.getElementById("editNote").value="";document.getElementById("editLink").value="";
+ document.getElementById("deleteBtn").style.display="none";document.getElementById("eventModal").classList.add("show");
+}
+function editEvent(id){
+ const e=events.find(x=>x.id===id); if(!e)return;
+ document.getElementById("modalTitle").textContent="編輯行程";document.getElementById("editId").value=e.id;
+ ["Date","Time","City","Name","Note","Link"].forEach(k=>document.getElementById("edit"+k).value=e[k.toLowerCase()]);
+ document.getElementById("deleteBtn").style.display="inline-block";document.getElementById("eventModal").classList.add("show");
+}
+function closeModal(){document.getElementById("eventModal").classList.remove("show")}
+function saveEvent(){
+ const id=document.getElementById("editId").value;
+ const e={id:id||("e"+Date.now()),date:editDate.value,time:editTime.value,city:editCity.value,name:editName.value,note:editNote.value,link:editLink.value};
+ if(!e.date||!e.name){alert("請至少填日期和行程名稱");return}
+ if(id){events=events.map(x=>x.id===id?e:x)}else events.push(e);
+ saveAll();renderDays();closeModal();
+}
+function deleteEvent(){
+ const id=editId.value;if(confirm("刪除這個行程？")){events=events.filter(x=>x.id!==id);saveAll();renderDays();closeModal()}
+}
+function resetData(){if(confirm("要還原初始行程嗎？你自行編輯的行程會被覆蓋。")){events=JSON.parse(JSON.stringify(initialEvents));saveAll();renderDays()}}
+
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>{
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(b.dataset.page).classList.add("active");
+ if(b.dataset.page==="tickets")renderTickets(); if(b.dataset.page==="more")renderMore();
+ if(b.dataset.page==="explore"){renderCategories();renderPhotos();}
+ window.scrollTo({top:0,behavior:"smooth"});
+}));
+
+let db;
+const req=indexedDB.open("FranceTripPDFs",1);
+req.onupgradeneeded=e=>{e.target.result.createObjectStore("pdfs",{keyPath:"id"})};
+req.onsuccess=e=>{db=e.target.result;renderTickets()};
+
+function putPdf(id,title,file){
+ const tx=db.transaction("pdfs","readwrite");tx.objectStore("pdfs").put({id,title,name:file.name,blob:file,added:new Date().toISOString()});
+ tx.oncomplete=()=>renderTickets();
+}
+function getPdf(id,cb){const r=db.transaction("pdfs").objectStore("pdfs").get(id);r.onsuccess=()=>cb(r.result)}
+function deletePdf(id){if(confirm("刪除這份 PDF？")){const tx=db.transaction("pdfs","readwrite");tx.objectStore("pdfs").delete(id);tx.oncomplete=renderTickets}}
+function openPdf(id){getPdf(id,r=>{if(!r)return;const url=URL.createObjectURL(r.blob);window.open(url,"_blank");setTimeout(()=>URL.revokeObjectURL(url),60000)})}
+function renderTickets(){
+ const box=document.getElementById("ticketList"); if(!box||!db)return; box.innerHTML="";
+ ticketSlots.forEach(t=>{
+   getPdf(t.id,r=>{
+     const div=document.createElement("div");div.className="card ticket";
+     div.innerHTML=`<div class="icon">${t.icon}</div><div class="meta"><b>${esc(t.title)}</b><br><small>${esc(t.sub)}</small><br><small>${r?"✓ "+esc(r.name):"尚未上傳 PDF"}</small></div>
+     <div><input class="upload" type="file" id="u_${t.id}" accept="application/pdf"><button class="btn ${r?"":"primary"}" onclick="document.getElementById('u_${t.id}').click()">${r?"替換":"上傳"}</button>
+     ${r?`<button class="btn gold" onclick="openPdf('${t.id}')">查看</button><button class="btn danger" onclick="deletePdf('${t.id}')">刪除</button>`:""}</div>`;
+     box.appendChild(div);document.getElementById("u_"+t.id).onchange=e=>{if(e.target.files[0])putPdf(t.id,t.title,e.target.files[0])};
+   })
+ });
+ const all=db.transaction("pdfs").objectStore("pdfs").getAll();all.onsuccess=()=>{
+   all.result.filter(r=>r.id.startsWith("custom_")).forEach(r=>{
+     const div=document.createElement("div");div.className="card ticket";
+     div.innerHTML=`<div class="icon">📎</div><div class="meta"><b>${esc(r.title)}</b><br><small>${esc(r.name)}</small></div><div><button class="btn gold" onclick="openPdf('${r.id}')">查看</button><button class="btn danger" onclick="deletePdf('${r.id}')">刪除</button></div>`;
+     box.appendChild(div);
+   })
+ }
+}
+document.getElementById("customPdf").addEventListener("change",e=>{
+ const f=e.target.files[0]; if(!f)return; const title=document.getElementById("customPdfName").value.trim()||f.name;
+ putPdf("custom_"+Date.now(),title,f);document.getElementById("customPdfName").value="";e.target.value="";
+});
+
+function addExpense(){
+ const amount=parseFloat(expAmount.value);if(!amount)return;
+ expenses.unshift({id:Date.now(),amount,date:expDate.value,cat:expCat.value,note:expNote.value});
+ expAmount.value="";expNote.value="";saveAll();renderExpenses();
+}
+function renderExpenses(){
+ const total=expenses.reduce((a,b)=>a+b.amount,0); const sel=expDate.value;
+ expenseTotal.textContent="€"+total.toFixed(2);expenseToday.textContent="€"+expenses.filter(x=>x.date===sel).reduce((a,b)=>a+b.amount,0).toFixed(2);expenseCount.textContent=expenses.length;
+ expensesEl=document.getElementById("expenses");expensesEl.innerHTML=expenses.map(x=>`<div class="checkitem"><div class="txt"><b>€${x.amount.toFixed(2)}</b> <span class="badge">${esc(x.cat)}</span><br><small>${esc(x.date)} ${esc(x.note)}</small></div><button class="btn danger" onclick="removeExpense(${x.id})">×</button></div>`).join("");
+}
+function removeExpense(id){expenses=expenses.filter(x=>x.id!==id);saveAll();renderExpenses()}
+document.getElementById("expDate").addEventListener("change",renderExpenses);
+
+function addShop(){const t=shopInput.value.trim();if(!t)return;shopping.push({text:t,place:shopPlace.value.trim(),done:false});shopInput.value="";shopPlace.value="";saveAll();renderShopping()}
+function toggleShop(i){shopping[i].done=!shopping[i].done;saveAll();renderShopping()}
+function removeShop(i){shopping.splice(i,1);saveAll();renderShopping()}
+function renderShopping(){document.getElementById("shopping").innerHTML=shopping.map((x,i)=>`<div class="checkitem ${x.done?"done":""}"><input type="checkbox" ${x.done?"checked":""} onchange="toggleShop(${i})"><div class="txt">${esc(x.text)} ${x.place?`<span class="badge">${esc(x.place)}</span>`:""}</div><button class="btn danger" onclick="removeShop(${i})">×</button></div>`).join("")}
+
+function addWish(txt,city){const t=txt||wishInput.value.trim();if(!t)return;wishes.push({text:t,city:city||wishCity.value.trim(),done:false});if(!txt){wishInput.value="";wishCity.value=""}saveAll();renderWishlist()}
+function toggleWish(i){wishes[i].done=!wishes[i].done;saveAll();renderWishlist()}
+function removeWish(i){wishes.splice(i,1);saveAll();renderWishlist()}
+function renderWishlist(){document.getElementById("wishlist").innerHTML=wishes.map((x,i)=>`<div class="checkitem ${x.done?"done":""}"><input type="checkbox" ${x.done?"checked":""} onchange="toggleWish(${i})"><div class="txt">${esc(x.text)} ${x.city?`<span class="badge">${esc(x.city)}</span>`:""}</div><button class="btn danger" onclick="removeWish(${i})">×</button></div>`).join("")}
+
+const wikiCache = {};
+async function wikiSummary(title){
+  const key = title;
+  if(wikiCache[key]) return wikiCache[key];
+  try{
+    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`);
+    if(!res.ok) throw new Error("wiki fetch failed");
+    const data = await res.json();
+    wikiCache[key] = data;
+    return data;
+  }catch(e){
+    wikiCache[key] = {};
+    return {};
+  }
+}
+
+async function renderPhotos(){
+ const grid=document.getElementById("photoGrid");
+ if(grid.dataset.loaded==="1") return;
+ for(const p of photoData){
+   const data = await wikiSummary(p.imageWiki || p.wiki);
+   const img = data.thumbnail?.source || "";
+   const card=document.createElement("div");
+   card.className="photoCard";
+   card.innerHTML=`<div class="photoTop">
+      <div class="photoImg" style="${img?`background-image:url('${img.replace(/'/g,"\\'")}')`:''}">${img?'':'圖片載入中或需連網'}</div>
+      <div class="photoBody">
+        <h3>${esc(p.title)}</h3>
+        <div class="mini">${esc(p.subtitle)}</div>
+        <div class="metaPills"><span>📍 路線</span><span>🕒 ${esc(p.timing)}</span></div>
+      </div>
+   </div>
+   <div class="photoExtra">
+      <details open><summary>建議拍攝路線</summary><ul>${p.route.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>
+      <details><summary>拍法提示</summary><ul>${p.tips.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>
+      <div class="actions" style="margin-top:10px">
+        <a class="btn maplink" href="${mapUrl(p.title.split('｜').pop())}" target="_blank">地圖搜尋</a>
+        <button class="btn gold" onclick="addWish('${esc(p.title).replace(/'/g,"\\'")}','')">加入 Wishlist</button>
+      </div>
+   </div>`;
+   grid.appendChild(card);
+ }
+ grid.dataset.loaded="1";
+}
+
+function renderMore(){renderExpenses();renderShopping();renderWishlist()}
+renderDays();renderMore();renderCategories();renderPhotos();
+</script>
+</body>
+</html>
